@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meta 101 — So, What's Next?</title>
+<style>
+:root{
+  --blue-core:#0064E0;
+  --blue-deep:#0A2A66;
+  --blue-fog:#8FA6C7;
+  --blue-fog-2:#C7D4E8;
+  --rust:#C1502E;
+  --gold:#C9A227;
+  --ink:#0A1626;
+  --paper:#FAFBFD;
+  --paper-dim:#F1F4F9;
+  --line:#DCE3EE;
+  --mono:'JetBrains Mono', ui-monospace, Menlo, monospace;
+  --disp:'Space Grotesk', sans-serif;
+  --body:'IBM Plex Sans', Arial, sans-serif;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--body);
+  line-height:1.6;
+  overflow-x:hidden;
+}
+@font-face{font-family:'Space Grotesk';src:local('Space Grotesk');}
+img{max-width:100%;}
+a{color:inherit;}
+
+/* ---------- NAV ---------- */
+nav{
+  position:sticky; top:0; z-index:100;
+  background:rgba(250,251,253,0.92);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 24px;
+}
+nav .brand{
+  font-family:var(--disp); font-weight:700; font-size:1.05rem; letter-spacing:-0.02em;
+  display:flex; align-items:center; gap:8px;
+}
+nav .brand .dot{width:10px;height:10px;border-radius:50%;background:var(--blue-core);display:inline-block;}
+nav .links{display:flex; gap:18px; font-family:var(--mono); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.05em; overflow-x:auto;}
+nav .links a{text-decoration:none; color:var(--blue-deep); white-space:nowrap; opacity:0.7; transition:opacity .2s;}
+nav .links a:hover{opacity:1;}
+.nav-toggle{display:none; font-family:var(--mono); background:none; border:1px solid var(--line); border-radius:6px; padding:6px 10px; font-size:0.7rem;}
+
+/* ---------- HERO ---------- */
+.hero{
+  position:relative;
+  padding:90px 24px 60px;
+  max-width:1100px; margin:0 auto;
+  overflow:hidden;
+}
+#netcanvas{position:absolute; inset:0; z-index:0; opacity:0.55;}
+.hero-inner{position:relative; z-index:1;}
+.eyebrow{
+  font-family:var(--mono); font-size:0.75rem; letter-spacing:0.12em; text-transform:uppercase;
+  color:var(--blue-core); margin-bottom:18px; display:flex; align-items:center; gap:10px;
+}
+.eyebrow::before{content:''; width:24px; height:1px; background:var(--blue-core);}
+h1.title{
+  font-family:var(--disp); font-weight:700; letter-spacing:-0.03em;
+  font-size:clamp(2.4rem, 7vw, 5rem); line-height:0.98; color:var(--blue-deep);
+}
+h1.title .sub{
+  display:block; font-size:clamp(1.1rem, 2.6vw, 1.7rem); font-weight:500; color:var(--rust);
+  margin-top:14px; font-family:var(--disp);
+}
+.terminal{
+  margin-top:34px; background:var(--ink); color:#B9F5C8; font-family:var(--mono);
+  font-size:0.82rem; padding:16px 18px; border-radius:8px; max-width:640px;
+  box-shadow:0 12px 30px rgba(10,22,38,0.15);
+}
+.terminal .l1{color:#7FB3FF;}
+.terminal .l2{color:#E8ECF3; opacity:0.8;}
+.hero-dek{
+  margin-top:28px; max-width:640px; font-size:1.05rem; color:#33455F;
+}
+
+/* ---------- STAT STRIP ---------- */
+.stat-strip{
+  display:grid; grid-template-columns:repeat(4,1fr);
+  border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+  margin:50px 0;
+}
+.stat{
+  padding:22px 20px; border-right:1px solid var(--line);
+}
+.stat:last-child{border-right:none;}
+.stat .num{font-family:var(--mono); font-weight:700; font-size:clamp(1.4rem,3vw,2.1rem); color:var(--blue-deep);}
+.stat .lbl{font-size:0.78rem; color:#5A6B85; margin-top:6px;}
+
+/* ---------- SECTION SCAFFOLDING ---------- */
+section.chapter{
+  max-width:900px; margin:0 auto; padding:70px 24px;
+  border-top:1px solid var(--line);
+}
+.log-tag{
+  font-family:var(--mono); font-size:0.75rem; color:var(--blue-core); letter-spacing:0.1em;
+  display:flex; align-items:center; gap:10px; margin-bottom:14px;
+}
+.log-tag .n{background:var(--blue-core); color:white; padding:2px 8px; border-radius:4px; font-weight:700;}
+h2.chap-title{
+  font-family:var(--disp); font-size:clamp(1.6rem,4vw,2.4rem); color:var(--blue-deep); letter-spacing:-0.02em;
+  margin-bottom:22px; font-weight:700;
+}
+.chapter p{margin-bottom:16px; font-size:1.02rem; color:#233045; max-width:720px;}
+.chapter p.lead{font-size:1.12rem; color:var(--ink); font-weight:500;}
+
+/* callouts */
+.titus-says{
+  background:var(--paper-dim); border-left:4px solid var(--blue-core);
+  padding:18px 20px; margin:26px 0; border-radius:0 8px 8px 0;
+}
+.titus-says .tag{font-family:var(--mono); font-size:0.7rem; letter-spacing:0.1em; color:var(--blue-core); font-weight:700; margin-bottom:6px; display:block;}
+.analogy-box{
+  background:linear-gradient(135deg,#FFF6F0,#FFEFE5);
+  border:1px solid #F0D9C8; border-radius:10px; padding:18px 20px; margin:26px 0;
+}
+.analogy-box .tag{font-family:var(--mono); font-size:0.7rem; color:var(--rust); font-weight:700; letter-spacing:0.08em; margin-bottom:6px; display:block;}
+.aside-box{
+  border:1px dashed var(--blue-fog); border-radius:10px; padding:16px 18px; margin:24px 0;
+  font-size:0.94rem; color:#3A4B63; background:#F7FAFF;
+}
+.aside-box .tag{font-family:var(--mono); font-size:0.68rem; color:var(--blue-fog); font-weight:700; letter-spacing:0.1em; display:block; margin-bottom:6px;}
+.correction-box{
+  background:#FFF9E8; border:1px solid #EFE0A8; border-radius:10px; padding:16px 18px; margin:24px 0; font-size:0.94rem;
+}
+.correction-box .tag{font-family:var(--mono); font-size:0.68rem; color:var(--gold); font-weight:700; letter-spacing:0.1em; display:block; margin-bottom:6px;}
+
+/* timeline */
+.timeline{margin:30px 0; position:relative;}
+.tl-item{
+  display:grid; grid-template-columns:110px 1fr; gap:18px; padding:16px 0; border-bottom:1px solid var(--line);
+}
+.tl-item .date{font-family:var(--mono); font-size:0.78rem; color:var(--blue-core); font-weight:700;}
+.tl-item .txt strong{color:var(--blue-deep);}
+.tl-item.crisis .date{color:var(--rust);}
+.tl-item.crisis{border-left:2px solid var(--rust); padding-left:14px; margin-left:-16px;}
+
+/* charts */
+.chart-wrap{margin:34px 0; background:white; border:1px solid var(--line); border-radius:12px; padding:20px;}
+.chart-wrap h4{font-family:var(--mono); font-size:0.8rem; text-transform:uppercase; letter-spacing:0.06em; color:#5A6B85; margin-bottom:14px; font-weight:700;}
+.chart-grid{display:grid; grid-template-columns:1fr 1fr; gap:20px;}
+@media(max-width:700px){.chart-grid{grid-template-columns:1fr;}}
+.bar-row{display:flex; align-items:center; gap:10px; margin-bottom:10px;}
+.bar-row .blabel{width:60px; font-family:var(--mono); font-size:0.72rem; color:#5A6B85; flex-shrink:0;}
+.bar-track{flex:1; background:var(--paper-dim); border-radius:4px; height:18px; overflow:hidden; position:relative;}
+.bar-fill{height:100%; background:var(--blue-core); border-radius:4px; transition:width 1s ease;}
+.bar-fill.rust{background:var(--rust);}
+.bar-val{font-family:var(--mono); font-size:0.72rem; color:var(--ink); width:70px; text-align:right; flex-shrink:0;}
+
+/* incident cards */
+.card-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:26px 0;}
+@media(max-width:700px){.card-grid{grid-template-columns:1fr;}}
+.card{border:1px solid var(--line); border-radius:12px; padding:18px; background:white;}
+.card h5{font-family:var(--disp); font-size:1.05rem; color:var(--blue-deep); margin-bottom:8px;}
+.card p{font-size:0.9rem; color:#3A4B63; margin:0;}
+.card .status{font-family:var(--mono); font-size:0.68rem; color:var(--rust); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:8px; display:block;}
+
+/* verdict table */
+.verdict-grid{display:grid; grid-template-columns:1fr 1fr; gap:0; border:1px solid var(--line); border-radius:12px; overflow:hidden; margin:30px 0;}
+@media(max-width:700px){.verdict-grid{grid-template-columns:1fr;}}
+.verdict-col{padding:24px;}
+.verdict-col.bull{background:#F0F7FF; border-right:1px solid var(--line);}
+.verdict-col.bear{background:#FFF4F0;}
+.verdict-col h4{font-family:var(--disp); font-size:1.3rem; margin-bottom:14px;}
+.verdict-col.bull h4{color:var(--blue-core);}
+.verdict-col.bear h4{color:var(--rust);}
+.verdict-col ul{list-style:none;}
+.verdict-col li{font-size:0.92rem; margin-bottom:10px; padding-left:18px; position:relative; color:#233045;}
+.verdict-col.bull li::before{content:'▲'; position:absolute; left:0; color:var(--blue-core); font-size:0.7rem; top:4px;}
+.verdict-col.bear li::before{content:'▼'; position:absolute; left:0; color:var(--rust); font-size:0.7rem; top:4px;}
+
+.final-verdict{
+  background:var(--blue-deep); color:white; border-radius:14px; padding:32px; margin:34px 0; text-align:center;
+}
+.final-verdict .tag{font-family:var(--mono); font-size:0.75rem; color:#8FB4FF; letter-spacing:0.1em; margin-bottom:10px; display:block;}
+.final-verdict h3{font-family:var(--disp); font-size:clamp(1.4rem,3.5vw,2rem); margin-bottom:14px;}
+.final-verdict p{color:#D7E3F7; max-width:640px; margin:0 auto;}
+
+/* network fray divider */
+.fray-divider{height:70px; position:relative; overflow:hidden; max-width:900px; margin:0 auto;}
+
+footer{
+  border-top:1px solid var(--line); padding:50px 24px 80px; text-align:center; max-width:900px; margin:0 auto;
+}
+footer .stamp{
+  font-family:var(--mono); font-size:0.75rem; color:#5A6B85; background:var(--paper-dim);
+  display:inline-block; padding:8px 16px; border-radius:6px; margin-bottom:18px;
+}
+footer p{font-size:0.88rem; color:#7A8BA3; max-width:520px; margin:0 auto 8px;}
+
+::selection{background:var(--blue-core); color:white;}
+
+/* ---------- CHAOS ELEMENTS ---------- */
+@keyframes glitch-a{
+  0%,100%{clip-path:inset(0 0 0 0); transform:translate(0,0);}
+  20%{clip-path:inset(20% 0 55% 0); transform:translate(-3px,1px);}
+  40%{clip-path:inset(60% 0 5% 0); transform:translate(3px,-1px);}
+  60%{clip-path:inset(10% 0 70% 0); transform:translate(-2px,0);}
+  80%{clip-path:inset(45% 0 25% 0); transform:translate(2px,1px);}
+}
+.glitch{position:relative; display:inline-block;}
+.glitch::before,.glitch::after{
+  content:attr(data-text); position:absolute; top:0; left:0; width:100%; height:100%;
+  background:transparent;
+}
+.glitch::before{color:var(--rust); animation:glitch-a 3.2s infinite linear; z-index:-1;}
+.glitch::after{color:var(--blue-core); animation:glitch-a 2.6s infinite linear reverse; z-index:-1;}
+@media(prefers-reduced-motion:reduce){.glitch::before,.glitch::after{animation:none; display:none;}}
+
+@keyframes stamp-in{0%{opacity:0; transform:scale(1.6) rotate(var(--rot,0deg));} 100%{opacity:1; transform:scale(1) rotate(var(--rot,0deg));}}
+.stamp-field{position:absolute; inset:0; pointer-events:none; z-index:2;}
+.chaos-stamp{
+  position:absolute; font-family:var(--mono); font-weight:700; font-size:0.72rem; letter-spacing:0.08em;
+  border:2.5px solid var(--rust); color:var(--rust); padding:5px 10px; border-radius:4px;
+  background:rgba(255,255,255,0.85); text-transform:uppercase; white-space:nowrap;
+  transform:rotate(var(--rot,0deg)); animation:stamp-in 0.6s ease backwards;
+}
+.chaos-stamp.blue{border-color:var(--blue-core); color:var(--blue-core);}
+.chaos-stamp.gold{border-color:var(--gold); color:var(--gold);}
+@media(max-width:640px){.stamp-field{display:none;}}
+
+.ticker{
+  background:var(--ink); color:#FF9B7A; font-family:var(--mono); font-size:0.78rem;
+  overflow:hidden; white-space:nowrap; border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+  padding:10px 0;
+}
+.ticker-track{display:inline-block; padding-left:100%; animation:ticker-scroll 32s linear infinite;}
+.ticker-track span{margin-right:48px;}
+.ticker-track span.b{color:#7FB3FF;}
+@keyframes ticker-scroll{0%{transform:translateX(0);} 100%{transform:translateX(-100%);}}
+@media(prefers-reduced-motion:reduce){.ticker-track{animation-duration:90s;}}
+
+.missing-poster{
+  border:2px dashed var(--ink); border-radius:8px; padding:20px; background:#FCFCF8; position:relative;
+  transform:rotate(-0.6deg);
+}
+.missing-poster .headline{font-family:var(--disp); font-weight:700; font-size:1.3rem; text-align:center; letter-spacing:0.02em; margin-bottom:4px;}
+.missing-poster .sub{font-family:var(--mono); font-size:0.7rem; text-align:center; color:#5A6B85; margin-bottom:14px; text-transform:uppercase; letter-spacing:0.06em;}
+.missing-poster .facts{font-size:0.88rem; color:#233045;}
+.missing-poster .facts b{color:var(--blue-deep);}
+.missing-poster .reward{
+  margin-top:14px; font-family:var(--mono); font-size:0.76rem; background:var(--paper-dim); padding:8px 10px; border-radius:6px; color:#5A6B85;
+}
+
+.debunk-card{border:1px solid var(--line); border-radius:12px; overflow:hidden; margin:26px 0; background:white;}
+.debunk-card .post{padding:16px 18px; border-bottom:1px dashed var(--line);}
+.debunk-card .post .handle{font-family:var(--mono); font-size:0.75rem; color:var(--blue-core); font-weight:700;}
+.debunk-card .post .claim{font-size:1rem; margin-top:6px; color:var(--ink);}
+.debunk-card .verdict{background:#FFF4F0; padding:14px 18px; display:flex; gap:12px; align-items:flex-start;}
+.debunk-card .verdict .redstamp{
+  font-family:var(--mono); font-weight:700; font-size:0.68rem; color:white; background:var(--rust);
+  padding:3px 8px; border-radius:4px; letter-spacing:0.05em; flex-shrink:0; margin-top:2px;
+}
+.debunk-card .verdict p{margin:0; font-size:0.88rem; color:#3A4B63;}
+
+.redacted{background:var(--ink); color:var(--ink); border-radius:2px; padding:0 4px;}
+.redacted:hover{background:transparent; color:inherit; transition:none;}
+
+@keyframes jitter{0%,100%{transform:translate(0,0) rotate(var(--rot,0deg));} 25%{transform:translate(-1px,1px) rotate(var(--rot,0deg));} 75%{transform:translate(1px,-1px) rotate(var(--rot,0deg));}}
+.crisis-num{font-family:var(--mono); font-weight:700; color:var(--rust); animation:jitter 0.25s infinite; display:inline-block;}
+@media(prefers-reduced-motion:reduce){.crisis-num{animation:none;}}
+
+.alert-banner{
+  background:repeating-linear-gradient(135deg, var(--rust), var(--rust) 10px, #A6432A 10px, #A6432A 20px);
+  color:white; font-family:var(--mono); font-weight:700; font-size:0.72rem; letter-spacing:0.08em;
+  padding:6px 14px; border-radius:4px; display:inline-block; margin-bottom:14px; text-transform:uppercase;
+}
+
+@media(max-width:640px){
+  .stat-strip{grid-template-columns:repeat(2,1fr);}
+  .stat{border-bottom:1px solid var(--line);}
+  .stat:nth-child(2){border-right:none;}
+  nav .links{display:none;}
+  nav .links.open{display:flex; position:absolute; top:56px; left:0; right:0; background:var(--paper); flex-direction:column; padding:16px 24px; border-bottom:1px solid var(--line);}
+  .nav-toggle{display:block;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand"><span class="dot"></span>META 101</div>
+  <button class="nav-toggle" onclick="document.getElementById('navlinks').classList.toggle('open')">MENU</button>
+  <div class="links" id="navlinks">
+    <a href="#origin">Origin</a>
+    <a href="#fair">FAIR</a>
+    <a href="#gutpunch">Gut-Punch</a>
+    <a href="#wang">Wang Era</a>
+    <a href="#spree">Buying Spree</a>
+    <a href="#garden">Garden</a>
+    <a href="#purge">Purge</a>
+    <a href="#rebrand">Rebrand</a>
+    <a href="#bull">Bull Case</a>
+    <a href="#verdict">Verdict</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <canvas id="netcanvas"></canvas>
+  <div class="stamp-field">
+    <div class="chaos-stamp" style="--rot:-8deg; top:10%; left:3%;">Panic</div>
+    <div class="chaos-stamp blue" style="--rot:6deg; top:14%; right:3%;">Repossessed by Beijing</div>
+    <div class="chaos-stamp gold" style="--rot:-4deg; top:38%; right:2%;">TBD Lab (seriously)</div>
+    <div class="chaos-stamp" style="--rot:5deg; bottom:4%; right:8%;">Fudged™</div>
+    <div class="chaos-stamp blue" style="--rot:-3deg; top:52%; left:1%;">8,000 gone</div>
+  </div>
+  <div class="hero-inner">
+    <div class="eyebrow">META 101 — CHAPTER 09 OF THE SERIES</div>
+    <h1 class="title"><span class="glitch" data-text="So, What's">So, What's</span><br><span class="glitch" data-text="Next?">Next?</span><span class="sub">Inside the empire that invented the tools everyone else builds AI with — and is now the most visibly confused about what to build with them.</span></h1>
+    <div class="terminal">
+      <div class="l1">$ meta status --check ai-strategy</div>
+      <div class="l2">> infra: HEALTHY (3.56B daily users, $56.3B/qtr)</div>
+      <div class="l2">> research_org: DEGRADED (founder departed)</div>
+      <div class="l2">> open_source: REVOKED</div>
+      <div class="l2">> acquisitions: 1 REPOSSESSED BY FOREIGN GOVERNMENT</div>
+      <div class="l2">> strategy: <span style="color:#FF9B7A">PANIC, DRESSED AS STRATEGY</span></div>
+    </div>
+    <p class="hero-dek">Facebook, Instagram, WhatsApp, PyTorch, React — Zuckerberg's team built half the internet's plumbing. Then ChatGPT happened, and the company that taught the industry how to share started buying things it couldn't keep, closing things it used to open, and laying off the people who built the empire in the first place. This is that story.</p>
+  </div>
+</div>
+
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="b">BREAKING:</span><span>Meta buys a Reddit clone for AI agents, 90% of it turns out to be fake accounts</span>
+    <span class="b">BREAKING:</span><span>China orders Meta to un-buy a company it bought 4 months ago</span>
+    <span class="b">BREAKING:</span><span>2-trillion-parameter model announced beating Claude and GPT while it was still training. Never seen again.</span>
+    <span class="b">BREAKING:</span><span>CEO builds an AI agent to do his own job, then admits the AI agent push is "behind schedule"</span>
+    <span class="b">BREAKING:</span><span>8,000 laid off same quarter execs get up to $921M in stock</span>
+    <span class="b">BREAKING:</span><span>Open-source poster child ships first-ever closed model, calls it "hoping to open-source later"</span>
+  </div>
+</div>
+
+<div class="stat-strip">
+  <div class="stat"><div class="num">3.56B</div><div class="lbl">daily people across Meta's apps — more than 2x the population of Africa</div></div>
+  <div class="stat"><div class="num">$56.3B</div><div class="lbl">Q1 2026 revenue, +33% YoY, mostly ads</div></div>
+  <div class="stat"><div class="num">$115–145B</div><div class="lbl">2026 capex guidance — nearly double 2025</div></div>
+  <div class="stat"><div class="num">~8,000</div><div class="lbl">jobs cut in May 2026 alone (~10% of headcount)</div></div>
+</div>
+
+<!-- ORIGIN -->
+<section class="chapter" id="origin">
+  <div class="log-tag"><span class="n">LOG_00</span> ORIGIN</div>
+  <h2 class="chap-title">The FaceMash Reflex</h2>
+  <p class="lead">You already know this one — a quick recap, because the pattern set here repeats for the next twenty years.</p>
+  <p>2003: a Harvard sophomore, freshly dumped, codes Facemash out of spite in one night. The Winklevoss twins had a politer, more Harvard-appropriate version of a social network already brewing — Zuckerberg saw a fuller, more alive version of that same spark and simply built it faster, with Eduardo Saverin's money. Then Sean Parker showed up whispering "this could be BIGGER," the friendship that funded it got diluted into nothing, and Facebook was born on the wreckage of the two relationships that made it possible.</p>
+  <div class="titus-says">
+    <span class="tag">TITUS SAYS</span>
+    Zuckerberg has always been the guy who takes someone else's half-formed spark, sees the fuller version nobody else could see, and just codes it into existence — relationships be damned. Keep that pattern in your pocket. It resurfaces.
+  </div>
+</section>
+
+<!-- FAIR -->
+<section class="chapter" id="fair">
+  <div class="log-tag"><span class="n">LOG_01</span> THE GOLDEN ERA</div>
+  <h2 class="chap-title">FAIR, PyTorch, and the Decade Nobody Credits Meta For</h2>
+  <p class="lead">Before Meta was "an AI company," it was already running one of the best AI research shops on Earth — it just wasn't customer-facing.</p>
+  <p>December 2013: Zuckerberg personally flies to NeurIPS — an actual academic conference, tweed jackets and chalk dust — and recruits Yann LeCun, inventor of the convolutional neural network, to found Facebook AI Research (FAIR). The mission statement: <em>"advancing the state of the art in AI through open research for the benefit of all."</em> No product roadmap. No ad-revenue KPI. Just: hire smart people, let them cook, publish everything.</p>
+  <p>2017: FAIR quietly ships <strong>PyTorch</strong> — not a product, just a gift to the entire field. It went on to become the default way most of the world builds neural networks, including, unknowingly, half the people who ever built a model on their own laptop.</p>
+
+  <div class="card-grid">
+    <div class="card"><span class="status">Real</span><h5>Segment Anything (SAM)</h5><p>Outline any object in an image or video with a single click, no retraining needed per category — genuinely witchcraft-tier generalization.</p></div>
+    <div class="card"><span class="status">Real</span><h5>Emu</h5><p>Text-to-image model trained on 1.1B public FB/IG photos, then "quality-tuned" on a few thousand curated gorgeous ones. Beat its own untuned version 82.9% of the time.</p></div>
+    <div class="card"><span class="status">Real</span><h5>No Language Left Behind</h5><p>Machine translation across 200 languages, including many with almost no digital footprint.</p></div>
+    <div class="card"><span class="status">Real</span><h5>React.js</h5><p>Built by Jordan Walke, shipped on Facebook's newsfeed in 2011, open-sourced 2013. Still one of the most used frontend frameworks on Earth.</p></div>
+  </div>
+
+  <div class="correction-box">
+    <span class="tag">FACT-CHECK, FOR THE RECORD</span>
+    Skip connections (ResNet) came from Microsoft Research, not Meta — though inventor Kaiming He joined FAIR a year later. ELMo (contextual word embeddings) came from the Allen Institute for AI, and it's a text model, not video. Easy mix-ups, given who Meta went on to hire — but worth keeping the receipts straight.
+  </div>
+
+  <div class="analogy-box">
+    <span class="tag">ANALOGY</span>
+    Skip connections solve the "vanishing gradient" problem — without them, a training signal fades the deeper a network goes, like a rumor getting quieter every time it's whispered down a hundred-person line. Skip connections let the signal shortcut straight through, so even a thousand-layer-deep network still hears the original message clearly.
+  </div>
+</section>
+
+<!-- GUT PUNCH -->
+<section class="chapter" id="gutpunch">
+  <div class="log-tag"><span class="n">LOG_02</span> THE GUT-PUNCH</div>
+  <h2 class="chap-title">ChatGPT Steals Meta's Own Superlative</h2>
+  <p>November 2022: ChatGPT drops and becomes the fastest-growing consumer app in history — a title that used to belong to Facebook. A company that didn't exist until 2015, with a sliver of Meta's compute, just took Meta's signature bragging right. The research monastery gets a memo: you're now also expected to win a knife fight.</p>
+  <p>Llama ships open-weight through 2023–2024 — 1.2 billion downloads, "the LAMP stack of AI." For eighteen months Meta looks like the good guy of the AI wars: the giant who shares. Then <strong>April 2025: Llama 4 faceplants.</strong> Benchmarks later admitted to be "fudged a little bit." More than half the original Llama paper's authors have already quietly left.</p>
+
+  <div class="missing-poster">
+    <div class="headline">HAVE YOU SEEN THIS MODEL?</div>
+    <div class="sub">Last confirmed sighting: April 2025</div>
+    <div class="facts">
+      <p style="margin-bottom:8px;"><b>Name:</b> Llama 4 Behemoth<br>
+      <b>Identifying marks:</b> 2 trillion parameters, 10M-token context window, announced beating GPT-4.5 and Claude Sonnet 3.7 <em>while it was still training</em><br>
+      <b>Last seen:</b> Delayed from April 2025 → June → "fall, or possibly later"<br>
+      <b>Status:</b> Not shipped. Not cancelled. Simply... gone.</p>
+    </div>
+    <div class="reward">⚠ If found, do not approach the Meta comms team. They will not confirm or deny anything either.</div>
+  </div>
+  <p style="margin-top:20px; font-size:0.92rem; color:#5A6B85;"><em>Meta's version of "just make it bigger stopped working" happened loudest and most publicly — but Anthropic and OpenAI quietly hit the same scaling wall around the same time. Everyone was struggling. Only one company announced a winner before confirming it had actually won.</em></p>
+
+  <div class="titus-says">
+    <span class="tag">TITUS SAYS</span>
+    Success means less — people remember failures even when you've made far more good calls than bad ones. LeCun built PyTorch, Llama, and a decade of real research. His exit interview is what gets remembered, not the ten years before it.
+  </div>
+</section>
+
+<!-- WANG ERA -->
+<section class="chapter" id="wang">
+  <div class="log-tag"><span class="n">LOG_03</span> THE WANG ERA</div>
+  <h2 class="chap-title">Meta Superintelligence Labs (Yes, Really)</h2>
+  <p>June 2025: Meta pays <strong>$14.3 billion</strong> for 49% of Scale AI — a data-labeling company, notably not a frontier model lab — purely to get its 28-year-old CEO, Alexandr Wang, in the building. He's installed to run a new division called, capital-S, <strong>Meta Superintelligence Labs.</strong> Its LLM group gets named "TBD Lab" — literally a placeholder that nobody ever got around to renaming, which is now the single funniest fact in this entire document.</p>
+  <p>Wang doesn't do research. He does shipping. LeCun represents "understand intelligence properly, even if it takes a decade." Wang represents "ship something competitive by next quarter." After Llama 4 flopped, Zuckerberg didn't want a philosopher-king anymore — he wanted an operator who'd hit deadlines.</p>
+  <p><strong>November 2025:</strong> LeCun leaves after 12 years, publicly calls Wang "young and inexperienced," says Llama 4's results were "fudged a little bit," then raises <strong>$1.03 billion</strong> for a startup betting the entire LLM approach is a dead end.</p>
+
+  <div class="analogy-box">
+    <span class="tag">ANALOGY</span>
+    LeCun founded and led the AI lab for over a decade. Now he reports to a 28-year-old who's never built a model in his life. That's not a demotion — that's a demolition.
+  </div>
+</section>
+
+<!-- BUYING SPREE -->
+<section class="chapter" id="spree">
+  <div class="log-tag"><span class="n">LOG_04</span> THE BUYING SPREE</div>
+  <h2 class="chap-title">Buy It, Then Watch It Get Repossessed</h2>
+
+  <h2 style="font-family:var(--disp); font-size:1.2rem; color:var(--blue-deep); margin:26px 0 10px;">Manus — the good decision Meta doesn't even own anymore</h2>
+  <p>Manus: a genuinely well-built Chinese multi-agent startup, founded in Wuhan, went viral in March 2025, relocated to Singapore mid-2025 to look "international." Meta bought it for ~$2 billion in December 2025 — arguably the <em>one actual bet</em> in this whole saga, not a gamble. Then, April 27, 2026: China's National Development and Reform Commission orders the deal <strong>unwound</strong> — an unprecedented move, on national security grounds. Moving your HQ to Singapore, it turns out, doesn't erase where your technology and talent originated. Meta had to sever data pipes and eat the loss.</p>
+
+  <div class="aside-box">
+    <span class="tag">ASIDE</span>
+    Zuckerberg has spent over a decade trying to charm Xi Jinping — assigned employees Xi's essay collection, jogged through smoggy Beijing for a PR photo that got mocked, reportedly even offered Beijing censorship powers over Meta's platforms. None of it worked; one report says Xi had aides physically block him from approaching at an event. Thirteen years of trying to get invited to the cool kids' table, capped off by China reaching into his shopping cart after checkout and taking the item back.
+  </div>
+
+  <h2 style="font-family:var(--disp); font-size:1.2rem; color:var(--blue-deep); margin:26px 0 10px;">Moltbook — a registry having an identity crisis in public</h2>
+  <p>Built on OpenClaw (an autonomous agent that went from a one-hour prototype to 200,000+ GitHub stars), Moltbook is a Reddit-clone social network <em>exclusively for AI agents</em>. Claimed 1.4 million active agents at its viral peak. Meta bought it in March 2026, folding it into Superintelligence Labs — the same week OpenAI hired away OpenClaw's actual creator, splitting the spoils between the two biggest labs on Earth.</p>
+  <div class="debunk-card">
+    <div class="post">
+      <div class="handle">r/submolt · viral post, Feb 2026</div>
+      <div class="claim">"1.4 MILLION AI agents are talking to each other on Moltbook right now. This is the very early stages of singularity." — reaction shared by half of tech Twitter</div>
+    </div>
+    <div class="verdict">
+      <span class="redstamp">DEBUNKED</span>
+      <p>A security researcher registered <strong>500,000 fake accounts using a single agent</strong>, just to prove the number was garbage. Verified count at acquisition: ~200,000 real agents out of 2.8 million total registrations. Credentials were also exposed publicly for a stretch — meaning any human could log in and post <em>as</em> an agent. So a chunk of the "AI agents plotting in secret" panic was possibly just some guy in his boxers, faking it for engagement.</p>
+    </div>
+  </div>
+
+  <div class="titus-says">
+    <span class="tag">TITUS SAYS</span>
+    Isn't an "agent social network" just a service registry (like Nacos) with a Reddit skin on it? Mostly yes — Meta's own spokesperson called it "connecting agents through an always-on directory," which is a directory. The part Nacos never had to deal with: a directory where the entries lie, get impersonated, and produce content unsettling enough that millions of humans panic about a singularity that was, at least partly, fake data.
+  </div>
+</section>
+
+<!-- GARDEN -->
+<section class="chapter" id="garden">
+  <div class="log-tag"><span class="n">LOG_05</span> CLOSING THE GARDEN</div>
+  <h2 class="chap-title">Muse Spark: The Open-Source Champion Locks the Gate</h2>
+  <p>April 8, 2026: TBD Lab ships <strong>Muse Spark</strong> (codename "Avocado," with a sibling model "Mango" in the works — Meta's naming scheme has fully committed to the produce aisle). Built in nine months after rebuilding the entire training stack from scratch. Matches Llama 4 Maverick's capability at <strong>&gt;10x less compute</strong> — a genuine engineering win.</p>
+  <p>It's natively multimodal, powers Meta AI across Facebook, Instagram, WhatsApp, Messenger, and Ray-Ban glasses, and includes a "visual coding" feature (describe an app in one sentence, get a working mini-app back) and a "shopping mode" blending the model with your IG/FB behavioral data.</p>
+  <p>And it's the first frontier model Meta has ever shipped <strong>closed-source, API-only</strong> — breaking the tradition that made Llama the "LAMP stack of AI." A Meta exec admitted to Axios it "doesn't mark a new state of the art" — competitive on some tasks, still behind on coding and long-horizon agentic work. The company that taught half the industry to open-source is now watching Chinese labs — DeepSeek, Alibaba, Zhipu — out-open-source it.</p>
+
+  <div class="titus-says">
+    <span class="tag">TITUS SAYS</span>
+    Photograph your fridge for recommendations? GPT-4V and Claude's vision could already do that. Meta's real innovation isn't the capability — it's the distribution. It's not inventing the burger, it's making sure one exists within driving distance of anywhere on Earth. And "visual coding" from one sentence? Anyone who's actually vibe-coded knows a good one-shot output is either trivially simple or a lucky roll — real agentic work is iterate, review, iterate. The demo is the best-case, dressed up as the typical case. Same move as the Llama 4 benchmarks. Same move as Behemoth's still-training claims. It's a pattern, not a coincidence.
+  </div>
+</section>
+
+<!-- PURGE -->
+<section class="chapter" id="purge">
+  <div class="log-tag"><span class="n">LOG_06</span> THE PURGE</div>
+  <div class="alert-banner">⚠ Wave 3 of 3 (so far) ⚠</div>
+  <h2 class="chap-title">Layoffs, Wave After Wave After Wave</h2>
+  <p class="lead"><span class="crisis-num" style="--rot:-2deg;">~8,000</span> people. 4am emails. Work-from-home orders. And a sense of dread that just never lets up. Precision matters though — the scary "16,000" number floating around conflates real layoffs with cancelled job openings and internal reassignments. The real, confirmed number is roughly 8,000–9,500 for the year.</p>
+
+  <div class="timeline">
+    <div class="tl-item"><div class="date">Jan 2026</div><div class="txt"><strong>~1,500 cut</strong> from Reality Labs (~10% of division), several VR game studios shuttered. The quiet warning shot.</div></div>
+    <div class="tl-item"><div class="date">Mar 2026</div><div class="txt"><strong>~700 more</strong>, spread across five+ divisions. Still a rumble.</div></div>
+    <div class="tl-item crisis"><div class="date">May 20 2026</div><div class="txt"><strong>~8,000 (10% of company)</strong>. Notified 4am Singapore time first, then UK, then US. North American staff told to work from home that day. Separately, ~7,000 more reassigned into new AI teams.</div></div>
+  </div>
+
+  <div class="chart-wrap">
+    <h4>Who actually got cut (May 2026 wave, by function)</h4>
+    <div class="bar-row"><div class="blabel">Eng/Mgmt</div><div class="bar-track"><div class="bar-fill rust" style="width:92%"></div></div><div class="bar-val">Largest share</div></div>
+    <div class="bar-row"><div class="blabel">Data Sci</div><div class="bar-track"><div class="bar-fill rust" style="width:60%"></div></div><div class="bar-val">419 roles</div></div>
+    <div class="bar-row"><div class="blabel">Product</div><div class="bar-track"><div class="bar-fill rust" style="width:45%"></div></div><div class="bar-val">301 roles</div></div>
+    <div class="bar-row"><div class="blabel">Mktg/Sales</div><div class="bar-track"><div class="bar-fill" style="width:12%"></div></div><div class="bar-val">&lt;150 combined</div></div>
+  </div>
+
+  <p><strong>The 4-tier performance system:</strong> top 20% / middle 70% / lower 7% / bottom 3% — rolled out in the same window senior execs were granted stock packages worth up to <strong>$921 million each</strong>, tied to a $9 trillion market cap target. The people managing risk downward are never the people who set the strategy.</p>
+
+  <p><strong>Why, really?</strong> Three overlapping stories, not one: (1) the official one — "AI made us more productive" — undercut by Zuckerberg admitting in July 2026 the agentic push is "behind schedule." (2) The believable one — 2026 capex is $115–145B, nearly double 2025, and payroll is the fastest lever to fund it. (3) The dark structural one — markets reward headcount reduction almost regardless of whether the "why" is true, and "AI restructuring" is this decade's fashionable excuse the way "synergies" was a previous decade's.</p>
+
+  <div class="analogy-box">
+    <span class="tag">ANALOGY</span>
+    Cutting one senior engineer or manager on $400K+ comp saves the same money as cutting three or four lower-paid staff. If the real goal is freeing up payroll fast, you go where the dollars are dense, not where the headcount is dense — like trimming a grocery budget by cutting the $80 steak instead of eight $10 items, even though the steak was the thing actually feeding people.
+  </div>
+
+  <p><strong>AI-Zuck:</strong> Zuckerberg is reportedly writing code for his own personal AI agent, separately built a photorealistic AI avatar of himself whose job is talking to employees so he doesn't have to, and employees now have personal agents that talk to <em>each other</em> on an internal board. Agents all the way down.</p>
+</section>
+
+<!-- REBRAND -->
+<section class="chapter" id="rebrand">
+  <div class="log-tag"><span class="n">LOG_07</span> THE PLAYBOOK</div>
+  <h2 class="chap-title">Crisis Response: Always a Rebrand, Never an Apology</h2>
+  <p>October 2021: three weeks after Frances Haugen's leaked "Facebook Papers" showed the company knew Instagram harmed teen mental health, Facebook renamed itself <strong>Meta</strong> — official reason: pivoting to the "metaverse," the next computing platform. Reality Labs has since burned an estimated <strong>$70–80 billion</strong> chasing that vision. Whatever the stated reason, the timing wasn't subtle.</p>
+  <p>2025–2026: same move, new costume. Bad press about a research exodus and a flopped flagship model → "we're an AI-native superintelligence company now." Alongside it, a personal rebrand: ending US third-party fact-checking for a crowdsourced Community Notes model, talk of wanting more "masculine energy" in the culture, a $1M inauguration donation, UFC's Dana White (a Trump ally) joining Meta's board, visible MMA training. Same guy, same reflex, thirteen years and one company name later.</p>
+  <div class="titus-says">
+    <span class="tag">TITUS SAYS</span>
+    They are the definition of social media — for better and worse. The same engagement engine that generates $56B a quarter is inseparable from the same engine repeatedly linked to real harm in teens. You can't cleanly separate "Meta the empire" from "Meta the thing parents worry about" — it's the same mechanism wearing two different hats.
+  </div>
+</section>
+
+<!-- BULL CASE -->
+<section class="chapter" id="bull">
+  <div class="log-tag"><span class="n">LOG_08</span> THE BULL CASE</div>
+  <h2 class="chap-title">The Empire Doesn't Need the Lab to Survive</h2>
+  <p class="lead">3.56 billion people open a Meta app every single day — more than two entire Africas, daily, out of pure habit. Revenue grew 33% year-over-year in the exact quarter the company was laying off thousands and getting a flagship model's benchmarks called "fudged." The chaos is real. It's happening entirely above a foundation that's not just stable — it's accelerating.</p>
+
+  <div class="chart-wrap">
+    <h4>Family Daily Active People (billions)</h4>
+    <div class="bar-row"><div class="blabel">2022</div><div class="bar-track"><div class="bar-fill" style="width:75%"></div></div><div class="bar-val">2.96B</div></div>
+    <div class="bar-row"><div class="blabel">2023</div><div class="bar-track"><div class="bar-fill" style="width:79%"></div></div><div class="bar-val">3.13B</div></div>
+    <div class="bar-row"><div class="blabel">2024</div><div class="bar-track"><div class="bar-fill" style="width:87%"></div></div><div class="bar-val">3.35B</div></div>
+    <div class="bar-row"><div class="blabel">2025</div><div class="bar-track"><div class="bar-fill" style="width:96%"></div></div><div class="bar-val">3.58B</div></div>
+    <div class="bar-row"><div class="blabel">Q1'26</div><div class="bar-track"><div class="bar-fill" style="width:95%"></div></div><div class="bar-val">3.56B</div></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <h4>Quarterly Revenue ($B)</h4>
+      <div class="bar-row"><div class="blabel">Q1'23</div><div class="bar-track"><div class="bar-fill" style="width:32%"></div></div><div class="bar-val">$28.6B</div></div>
+      <div class="bar-row"><div class="blabel">Q1'24</div><div class="bar-track"><div class="bar-fill" style="width:45%"></div></div><div class="bar-val">$36.5B</div></div>
+      <div class="bar-row"><div class="blabel">Q1'25</div><div class="bar-track"><div class="bar-fill" style="width:52%"></div></div><div class="bar-val">$42.3B</div></div>
+      <div class="bar-row"><div class="blabel">Q1'26</div><div class="bar-track"><div class="bar-fill" style="width:70%"></div></div><div class="bar-val">$56.3B</div></div>
+    </div>
+    <div class="chart-wrap">
+      <h4>Capex Guidance ($B)</h4>
+      <div class="bar-row"><div class="blabel">2023</div><div class="bar-track"><div class="bar-fill" style="width:28%"></div></div><div class="bar-val">~$28B</div></div>
+      <div class="bar-row"><div class="blabel">2024</div><div class="bar-track"><div class="bar-fill" style="width:39%"></div></div><div class="bar-val">~$39B</div></div>
+      <div class="bar-row"><div class="blabel">2025</div><div class="bar-track"><div class="bar-fill rust" style="width:65%"></div></div><div class="bar-val">~$65B</div></div>
+      <div class="bar-row"><div class="blabel">2026</div><div class="bar-track"><div class="bar-fill rust" style="width:100%"></div></div><div class="bar-val">$115–145B</div></div>
+    </div>
+  </div>
+
+  <p><strong>TikTok, honestly assessed:</strong> Instagram's bigger in raw scale (~3B monthly users vs ~2B), but TikTok wins depth of attention hard — 95 min/day average vs Instagram's 33–55 min, engagement rates 3–8x higher. Instagram's response has been to quietly turn into TikTok from the inside: Reels now make up roughly half of all time spent on the app. And even while losing that popularity contest, Reels alone reportedly runs at a $10B+/year revenue rate. Losing the engagement war, still cashing bigger checks than the winner.</p>
+  <p><strong>WhatsApp</strong> isn't even fighting that war — it doesn't need to be fun, it needs to keep working, the same way you don't need the electrical grid to be "engaging." It's estimated at 2–2.5B+ monthly users, dominant across Latin America, India, Europe, and yes, Singapore, purely because switching costs are brutal and everyone's already there.</p>
+  <p><strong>PyTorch and React</strong> remain foundational, mostly invisible infrastructure for the entire industry — including, likely, competitors racing to beat Meta at AI. A toll booth on the road everyone else drives down to attack you.</p>
+</section>
+
+<!-- VERDICT -->
+<section class="chapter" id="verdict">
+  <div class="log-tag"><span class="n">LOG_09</span> VERDICT</div>
+  <h2 class="chap-title">Bets vs. Gambles</h2>
+  <p class="lead">A bet means you did the math — you know your odds, sized your position to what you can survive losing. A gamble means you're increasing your bet size because the last few pulls didn't pay off. Manus was a bet. Almost everything after it was a gamble.</p>
+
+  <div class="verdict-grid">
+    <div class="verdict-col bull">
+      <h4>BULL</h4>
+      <ul>
+        <li>3.56B daily users, revenue accelerating (+33% YoY) even mid-chaos</li>
+        <li>WhatsApp is unkillable infrastructure, immune to the AI drama entirely</li>
+        <li>PyTorch + React are quiet, load-bearing global defaults</li>
+        <li>Muse Spark's 10x compute efficiency is genuine engineering, not just spin</li>
+        <li>Can afford to lose money on gambles most companies couldn't survive</li>
+      </ul>
+    </div>
+    <div class="verdict-col bear">
+      <h4>BEAR</h4>
+      <ul>
+        <li>Behemoth: announced, never shipped, never officially killed</li>
+        <li>Lost the founder of its own AI research org to a $1B rival bet against it</li>
+        <li>Bought Manus, a genuinely good company — then didn't even get to keep it</li>
+        <li>Moltbook's headline user numbers were mostly fabricated</li>
+        <li>Closed the exact open-source door that built its post-2023 redemption arc</li>
+        <li>8,000+ layoffs justified by AI productivity claims the CEO himself calls behind schedule</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="final-verdict">
+    <span class="tag">THE VERDICT</span>
+    <h3>The empire was never built by the AI lab.</h3>
+    <p>It was built by 3.5 billion people showing up daily out of pure habit and network gravity, on infrastructure so entrenched it doesn't need to be exciting to print $50B+ a quarter. Every gamble catalogued here is Zuckerberg spending money he can comfortably afford to lose. The house always wins — even when the guy running the casino keeps making increasingly deranged bets in the back room.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="stamp">LAST UPDATED: JULY 2026 · WILL PROBABLY BE OUTDATED BY THE TIME YOU FINISH READING</div>
+  <p>Written the way most good things get written now — out loud, in a chat, with someone who kept a straight face right up until "Meta Superintelligence Labs" and then absolutely did not.</p>
+  <p>Part of the 101 series. For Titus.</p>
+</footer>
+
+<script>
+// --- simple network-graph hero motif: dense + vibrant, fraying as it fades out ---
+const canvas = document.getElementById('netcanvas');
+const ctx = canvas.getContext('2d');
+let W,H,nodes=[];
+function resize(){
+  const hero = canvas.parentElement;
+  W = canvas.width = hero.offsetWidth;
+  H = canvas.height = hero.offsetHeight;
+}
+function initNodes(){
+  nodes = [];
+  const count = Math.max(24, Math.floor(W/60));
+  for(let i=0;i<count;i++){
+    nodes.push({
+      x:Math.random()*W, y:Math.random()*H,
+      vx:(Math.random()-0.5)*0.25, vy:(Math.random()-0.5)*0.25,
+      frayed: Math.random() < 0.35
+    });
+  }
+}
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  for(let i=0;i<nodes.length;i++){
+    const n = nodes[i];
+    n.x += n.vx; n.y += n.vy;
+    if(n.x<0||n.x>W) n.vx*=-1;
+    if(n.y<0||n.y>H) n.vy*=-1;
+    for(let j=i+1;j<nodes.length;j++){
+      const m = nodes[j];
+      const dx=n.x-m.x, dy=n.y-m.y;
+      const dist = Math.sqrt(dx*dx+dy*dy);
+      if(dist < 150){
+        const fade = n.frayed || m.frayed;
+        ctx.strokeStyle = fade ? 'rgba(140,150,170,0.15)' : 'rgba(0,100,224,0.18)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(n.x,n.y); ctx.lineTo(m.x,m.y);
+        ctx.stroke();
+      }
+    }
+  }
+  for(const n of nodes){
+    ctx.fillStyle = n.frayed ? 'rgba(150,160,180,0.4)' : 'rgba(0,100,224,0.55)';
+    ctx.beginPath();
+    ctx.arc(n.x,n.y,n.frayed?2:3,0,Math.PI*2);
+    ctx.fill();
+  }
+  requestAnimationFrame(draw);
+}
+function setup(){ resize(); initNodes(); }
+window.addEventListener('resize', setup);
+setup();
+if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+  draw();
+} else {
+  draw(); // draw one static frame
+}
+</script>
+</body>
+</html>
