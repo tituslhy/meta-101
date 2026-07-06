@@ -67,7 +67,7 @@ nav .links a:hover{opacity:1;}
 }
 .eyebrow::before{content:''; width:24px; height:1px; background:var(--blue-core);}
 h1.title{
-  font-family:var(--disp); font-weight:700; letter-spacing:-0.03em;
+  font-family:var(--disp); font-weight:700; letter-spacing:-0.03em; max-width:740px;
   font-size:clamp(2.4rem, 7vw, 5rem); line-height:0.98; color:var(--blue-deep);
 }
 h1.title .sub{
@@ -228,7 +228,7 @@ footer p{font-size:0.88rem; color:#7A8BA3; max-width:520px; margin:0 auto 8px;}
 }
 .chaos-stamp.blue{border-color:var(--blue-core); color:var(--blue-core);}
 .chaos-stamp.gold{border-color:var(--gold); color:var(--gold);}
-@media(max-width:640px){.stamp-field{display:none;}}
+@media(max-width:1150px){.stamp-field{display:none;}}
 
 .ticker{
   background:var(--ink); color:#FF9B7A; font-family:var(--mono); font-size:0.78rem;
@@ -301,6 +301,7 @@ footer p{font-size:0.88rem; color:#7A8BA3; max-width:520px; margin:0 auto 8px;}
     <a href="#garden">Garden</a>
     <a href="#purge">Purge</a>
     <a href="#rebrand">Rebrand</a>
+    <a href="#google">Google Mirror</a>
     <a href="#bull">Bull Case</a>
     <a href="#verdict">Verdict</a>
   </div>
@@ -309,11 +310,11 @@ footer p{font-size:0.88rem; color:#7A8BA3; max-width:520px; margin:0 auto 8px;}
 <div class="hero">
   <canvas id="netcanvas"></canvas>
   <div class="stamp-field">
-    <div class="chaos-stamp" style="--rot:-8deg; top:10%; left:3%;">Panic</div>
-    <div class="chaos-stamp blue" style="--rot:6deg; top:14%; right:3%;">Repossessed by Beijing</div>
-    <div class="chaos-stamp gold" style="--rot:-4deg; top:38%; right:2%;">TBD Lab (seriously)</div>
-    <div class="chaos-stamp" style="--rot:5deg; bottom:4%; right:8%;">Fudged™</div>
-    <div class="chaos-stamp blue" style="--rot:-3deg; top:52%; left:1%;">8,000 gone</div>
+    <div class="chaos-stamp" style="--rot:-8deg; top:4%; right:34%;">Panic</div>
+    <div class="chaos-stamp blue" style="--rot:6deg; top:17%; right:2%;">Repossessed by Beijing</div>
+    <div class="chaos-stamp gold" style="--rot:-4deg; top:32%; right:20%;">TBD Lab (seriously)</div>
+    <div class="chaos-stamp" style="--rot:5deg; top:48%; right:3%;">Fudged™</div>
+    <div class="chaos-stamp blue" style="--rot:-3deg; top:62%; right:24%;">8,000 gone</div>
   </div>
   <div class="hero-inner">
     <div class="eyebrow">META 101 — CHAPTER 09 OF THE SERIES</div>
@@ -517,9 +518,46 @@ footer p{font-size:0.88rem; color:#7A8BA3; max-width:520px; margin:0 auto 8px;}
   </div>
 </section>
 
+<!-- GOOGLE MIRROR -->
+<section class="chapter" id="google">
+  <div class="log-tag"><span class="n">LOG_08</span> THE GOOGLE MIRROR</div>
+  <h2 class="chap-title">Same Threat, Opposite Reflex</h2>
+  <p class="lead">Every hyperscaler is staring down the identical nightmare: what if search, social discovery, ads, commerce, creators, personal assistants, wearables, and agentic browsing all get re-routed through someone else's AI layer, and your apps become invisible "surfaces" underneath it? Meta isn't uniquely scared. It's uniquely LOUD about being scared.</p>
+
+  <div class="chart-grid">
+    <div class="chart-wrap">
+      <h4>2026 Capex Guidance ($B)</h4>
+      <div class="bar-row"><div class="blabel">Meta</div><div class="bar-track"><div class="bar-fill" style="width:62%"></div></div><div class="bar-val">$115–145B</div></div>
+      <div class="bar-row"><div class="blabel">Google</div><div class="bar-track"><div class="bar-fill" style="width:82%"></div></div><div class="bar-val">$175–185B</div></div>
+    </div>
+    <div class="chart-wrap">
+      <h4>Layoffs as % of headcount (2026)</h4>
+      <div class="bar-row"><div class="blabel">Meta</div><div class="bar-track"><div class="bar-fill rust" style="width:100%"></div></div><div class="bar-val">~10% (8,000)</div></div>
+      <div class="bar-row"><div class="blabel">Google</div><div class="bar-track"><div class="bar-fill" style="width:18%"></div></div><div class="bar-val">~1–2% (1.5–3k)</div></div>
+    </div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card"><span class="status" style="color:var(--rust);">Loud</span><h5>Meta's Reflex</h5><p>CEO builds a personal AI agent, then a separate photorealistic AI avatar of himself so he doesn't have to talk to employees. Renames the research division. Renames the company (again). Announces layoffs as an 8,000-person, company-wide, press-worthy event.</p></div>
+    <div class="card"><span class="status" style="color:var(--blue-core);">Quiet</span><h5>Google's Reflex</h5><p>Founders Larry Page and Sergey Brin came out of retirement — Brin's reportedly in the office 3–4 days a week, personally coding on Gemini. No headline layoff number was ever announced; cuts happened through rolling WARN filings and buyouts that outside firms had to reconstruct after the fact.</p></div>
+  </div>
+
+  <div class="titus-says">
+    <span class="tag">TITUS SAYS</span>
+    Google has more infrastructure to pivot with, spent MORE on capex than Meta, and still laid people off — just quietly, without turning it into a spectacle.
+  </div>
+
+  <p>The business-level fear is universal and entirely rational — every hyperscaler making this bet is responding to the same real threat. But the volume of the response is not explained by the threat. It's explained by the specific person standing at the top of each org chart. One founder duo ran <em>toward</em> the fire with their sleeves rolled up. The other CEO built a robot version of himself to avoid standing near it at all.</p>
+
+  <div class="analogy-box">
+    <span class="tag">ANALOGY</span>
+    Same house fire, two very different owners. One grabs a bucket and starts running toward the kitchen. The other calls a press conference to announce the house is being rebranded as a "resilience-native living space," hires a stunt double to handle questions from the neighbors, and lets the actual fire keep burning in the background.
+  </div>
+</section>
+
 <!-- BULL CASE -->
 <section class="chapter" id="bull">
-  <div class="log-tag"><span class="n">LOG_08</span> THE BULL CASE</div>
+  <div class="log-tag"><span class="n">LOG_09</span> THE BULL CASE</div>
   <h2 class="chap-title">The Empire Doesn't Need the Lab to Survive</h2>
   <p class="lead">3.56 billion people open a Meta app every single day — more than two entire Africas, daily, out of pure habit. Revenue grew 33% year-over-year in the exact quarter the company was laying off thousands and getting a flagship model's benchmarks called "fudged." The chaos is real. It's happening entirely above a foundation that's not just stable — it's accelerating.</p>
 
@@ -556,7 +594,7 @@ footer p{font-size:0.88rem; color:#7A8BA3; max-width:520px; margin:0 auto 8px;}
 
 <!-- VERDICT -->
 <section class="chapter" id="verdict">
-  <div class="log-tag"><span class="n">LOG_09</span> VERDICT</div>
+  <div class="log-tag"><span class="n">LOG_10</span> VERDICT</div>
   <h2 class="chap-title">Bets vs. Gambles</h2>
   <p class="lead">A bet means you did the math — you know your odds, sized your position to what you can survive losing. A gamble means you're increasing your bet size because the last few pulls didn't pay off. Manus was a bet. Almost everything after it was a gamble.</p>
 
